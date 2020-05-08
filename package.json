@@ -1,0 +1,38 @@
+{
+  "name": "OSLO Search Engine",
+  "version": "0.1.0",
+  "description": "Frontend to query the OSLO Knowledge Graph (in Elasticsearch)",
+  "keywords": [
+    "oslo",
+    "search",
+    "engine",
+    "knowledge",
+    "graph"
+  ],
+  "repository": "https://github.com/Informatievlaanderen/OSLO-Search-Engine",
+  "author": "Dwight Van Lancker - Information Flanders",
+  "bugs": {
+    "url": "https://github.com/Informatievlaanderen/OSLO-Search-Engine/issues"
+  },
+  "homepage": "https://github.com/Informatievlaanderen/OSLO-Search-Engine#readme",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@govflanders/vl-ui-core": "^3.10.12",
+    "@govflanders/vl-ui-vue-components": "^3.10.14",
+    "core-js": "^3.6.4",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.3.0",
+    "@vue/cli-service": "^4.3.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
