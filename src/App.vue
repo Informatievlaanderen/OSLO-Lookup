@@ -1,27 +1,49 @@
 <template>
-  <div id="app">
-    <SearchComponent/>
-  </div>
+    <div id="app">
+        <vl-content-header
+                mod-large
+                mod-show-mobile
+                mod-context
+                :background="{
+            src: '//www.vlaanderen.be/sites/default/files/ip_acm/page_banner_narrow/header.jpg',
+            srcset: '//www.vlaanderen.be/sites/default/files/ip_acm/page_banner_mobile_alt/header.jpg 320w, //www.vlaanderen.be/sites/default/files/ip_acm/page_banner_narrow/header.jpg 1024w, //www.vlaanderen.be/sites/default/files/ip_acm/page_banner_wide_alt/header.jpg 1600w',
+            alt: 'OSLO Content Header',
+          }">
+            <div class="vl-content-header__logo-wrapper">
+                <vl-content-header-entity
+                        prefix="Informatie"
+                        title="Vlaanderen"
+                        logo="true"
+                        href="https://data.vlaanderen.be/doc/organisatie/OVO002949"
+                        mod-small/>
+            </div>
+            <vl-content-header-title
+                    title="Search Engine"
+                    tag-name="h1"
+                    href="https://github.com/Informatievlaanderen/OSLO-Search-Engine"
+                    :context="{
+                href: 'https://overheid.vlaanderen.be/producten-diensten/oslo',
+                title: 'OSLO',
+              }"/>
+        </vl-content-header>
+
+        <SearchComponent/>
+    </div>
 </template>
 
 <script>
-import SearchComponent from "./components/SearchComponent";
+    import SearchComponent from "./components/SearchComponent";
 
-export default {
-  name: 'App',
-  components: {
-    SearchComponent
-  }
-}
+    export default {
+        name: 'App',
+        components: {
+            SearchComponent
+        }
+    }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss">
+    $vl-icon-font-location: "./assets/";
+    @import "~@govflanders/vl-ui-core/src/scss/core";
+    @import "~@govflanders/vl-ui-content-header/src/scss/content-header";
 </style>
