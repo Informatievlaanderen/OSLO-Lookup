@@ -19,7 +19,11 @@ import {
   VlButton,
   VlTabs,
   VlTab,
-  VlSearch
+  VlSearch,
+  VlSearchResults,
+  VlSearchResult,
+  VlSearchResultProperty,
+  VlInfoTile
 } from'@govflanders/vl-ui-vue-components';
 
 Vue.component('vl-grid', VlGrid);
@@ -36,6 +40,10 @@ Vue.component('vl-button', VlButton);
 Vue.component('vl-tabs', VlTabs);
 Vue.component('vl-tab', VlTab);
 Vue.component('vl-search', VlSearch);
+Vue.component('vl-search-results', VlSearchResults);
+Vue.component('vl-search-result', VlSearchResult);
+Vue.component('vl-search-result-property', VlSearchResultProperty);
+Vue.component('vl-info-tile', VlInfoTile);
 
 Vue.use(VlCore);
 Vue.use(VlUtil);

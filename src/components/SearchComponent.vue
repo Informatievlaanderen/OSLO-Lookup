@@ -2,27 +2,37 @@
     <div>
         <vl-region>
             <vl-layout>
-                <vl-grid class="vl-grid--align-center">
+                <vl-grid class="vl-grid--align-center" mod-stacked>
                     <vl-column>
                         <vl-title class="title" tag-name="h1">
                             OSLO Search Engine
                         </vl-title>
                     </vl-column>
                     <vl-column width="8">
-                        <vl-search mod-inline name="search-input" id="search-input"
-                                   placeholder="Search for application profiles or terminology"></vl-search>
+                        <!--<vl-search @click="executeQuery" mod-inline name="search-input" id="search-input"
+                                   placeholder="Search for application profiles or terminology"></vl-search>-->
+                        <vl-input-field
+                                @focus="focus = true"
+                                v-model="query"
+                                v-bind:class="{'input-focus': focus}"
+                                id="search-input"
+                                name="search-input" />
+                    </vl-column>
+                    <vl-column width="8">
+                        <vl-button @click="executeQuery" v-if="focus" id="search-button"><vl-icon icon="search"/></vl-button>
                     </vl-column>
                 </vl-grid>
             </vl-layout>
         </vl-region>
         <vl-region>
-
             <vl-layout>
-                <vl-grid>
-                    <vl-tabs>
-                        <vl-tab label="Terminologie"></vl-tab>
-                        <vl-tab label="Applicatieprofielen"></vl-tab>
-                    </vl-tabs>
+                <vl-grid mod-stacked>
+                    <vl-column>
+                        <vl-tabs>
+                            <vl-tab label="Terminologie"><VocabularyComponent :query="query" ref="Vocabulary"/></vl-tab>
+                            <vl-tab label="Applicatieprofielen"></vl-tab>
+                        </vl-tabs>
+                    </vl-column>
                 </vl-grid>
             </vl-layout>
         </vl-region>
@@ -31,8 +41,21 @@
 </template>
 
 <script>
+    import VocabularyComponent from "./VocabularyComponent";
     export default {
-        name: "SearchComponent"
+        name: "SearchComponent",
+        components: {VocabularyComponent},
+        data() {
+            return {
+                query: '',
+                focus: false
+            }
+        },
+        methods: {
+            executeQuery(){
+                this.$refs.Vocabulary.executeQuery();
+            }
+        }
     }
 </script>
 
@@ -49,27 +72,27 @@
         font-size: 350%;
     }
 
-    .vl-search {
-        width: 100%;
-    }
-
     #search-input {
         height: 50px;
         border-radius: 25px;
         border: 2px solid #0055cc;
         font-size: 120%;
+        width: 100%;
     }
 
-    #search-input:focus {
-        border: 2px solid #ffe615;
+    #search-button {
+        height: 50px;
+        border-radius: 25px;
+        border: 2px solid #0055cc;
+        font-size: 120%;
+        transition-delay: 2s;
     }
 
-    .vl-search__submit {
-        border-radius: 50px;
-        height: 50px !important;
-        outline: none !important;
-
+    .input-focus {
+        border: 2px solid #ffe615!important;
+        transition-duration: 1s;
     }
+
 
 
 </style>
