@@ -23,7 +23,10 @@ import {
   VlSearchResults,
   VlSearchResult,
   VlSearchResultProperty,
-  VlInfoTile
+  VlInfoTile,
+  VlLinkList,
+  VlLinkListItem,
+  VlLink
 } from'@govflanders/vl-ui-vue-components';
 
 Vue.component('vl-grid', VlGrid);
@@ -44,6 +47,9 @@ Vue.component('vl-search-results', VlSearchResults);
 Vue.component('vl-search-result', VlSearchResult);
 Vue.component('vl-search-result-property', VlSearchResultProperty);
 Vue.component('vl-info-tile', VlInfoTile);
+Vue.component('vl-link-list', VlLinkList);
+Vue.component('vl-link-list-item', VlLinkListItem);
+Vue.component('vl-link', VlLink);
 
 Vue.use(VlCore);
 Vue.use(VlUtil);

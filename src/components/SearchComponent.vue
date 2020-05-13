@@ -30,7 +30,7 @@
                     <vl-column>
                         <vl-tabs>
                             <vl-tab label="Terminologie"><VocabularyComponent :query="query" ref="Vocabulary"/></vl-tab>
-                            <vl-tab label="Applicatieprofielen"></vl-tab>
+                            <vl-tab label="Klassen & Eigenschappen"><ApplicationProfileComponent :query="query" ref="ApplicationProfile"/></vl-tab>
                         </vl-tabs>
                     </vl-column>
                 </vl-grid>
@@ -42,9 +42,10 @@
 
 <script>
     import VocabularyComponent from "./VocabularyComponent";
+    import ApplicationProfileComponent from "./ApplicationProfileComponent";
     export default {
         name: "SearchComponent",
-        components: {VocabularyComponent},
+        components: {ApplicationProfileComponent, VocabularyComponent},
         data() {
             return {
                 query: '',
@@ -54,6 +55,7 @@
         methods: {
             executeQuery(){
                 this.$refs.Vocabulary.executeQuery();
+                this.$refs.ApplicationProfile.executeQuery();
             }
         }
     }

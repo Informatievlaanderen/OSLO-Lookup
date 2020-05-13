@@ -76,7 +76,6 @@
 
 <style lang="scss">
     @import "~@govflanders/vl-ui-core/src/scss/core";
-    @import "~@govflanders/vl-ui-search-results/src/scss/search-results";
     @import "~@govflanders/vl-ui-info-tile/src/scss/info-tile";
 
     .voc-information {
