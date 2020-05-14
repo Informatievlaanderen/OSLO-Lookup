@@ -17,8 +17,6 @@
                                 v-bind:class="{'input-focus': focus}"
                                 id="search-input"
                                 name="search-input" />
-                    </vl-column>
-                    <vl-column width="8">
                         <vl-button @click="executeQuery" v-if="focus" id="search-button"><vl-icon icon="search"/></vl-button>
                     </vl-column>
                 </vl-grid>
@@ -85,13 +83,15 @@
     #search-button {
         height: 50px;
         border-radius: 25px;
+        position: absolute;
+        right: 1px;
         border: 2px solid #0055cc;
         font-size: 120%;
-        transition-delay: 2s;
     }
 
     .input-focus {
         border: 2px solid #ffe615!important;
+        width: 85%!important;
         transition-duration: 1s;
     }
 
