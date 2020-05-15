@@ -1,5 +1,6 @@
 <template>
-    <vl-grid>
+    <span>
+    <vl-grid v-if="results.length > 0">
         <vl-column width="8">
             <vl-grid mod-stacked>
                 <vl-column v-bind:key="result._source.URI" width="5" v-for="result of results">
@@ -19,19 +20,27 @@
             <vl-grid mod-stacked>
                 <vl-column v-bind:key="voc" v-for="voc of related">
                     <vl-info-tile
-                        :href="voc"
-                        :title="voc"
-                        subtitle=""
-                        target="_blank"
+                            :href="voc"
+                            :title="voc"
+                            subtitle=""
+                            target="_blank"
                     />
                 </vl-column>
             </vl-grid>
         </vl-column>
     </vl-grid>
+    <vl-grid v-else>
+        <vl-column width="8">
+            <vl-title tag-name="h3">Geen resultaten beschikbaar.</vl-title>
+        </vl-column>
+    </vl-grid>
+
+    </span>
 </template>
 
 <script>
     const elasticsearch = require('elasticsearch');
+    const config = require('../../config');
 
     export default {
         name: "VocabularyComponent",
@@ -47,7 +56,7 @@
         methods: {
             async executeQuery() {
                 const client = new elasticsearch.Client({
-                    host: 'localhost:9200'
+                    host: config.ELASTIC_HOST
                 });
 
                 const response = await client.search({
@@ -65,10 +74,15 @@
                 });
 
                 this.results = response.hits.hits;
-                for(let result of this.results){
+                for (let result of this.results) {
                     this.related.add(result._source.context);
                 }
 
+                this.emitResultToParent()
+
+            },
+            emitResultToParent() {
+                this.$emit('childToParent', {'Vocabulary': this.results.length});
             }
         }
     }

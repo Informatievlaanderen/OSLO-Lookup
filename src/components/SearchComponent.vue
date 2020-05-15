@@ -9,26 +9,30 @@
                         </vl-title>
                     </vl-column>
                     <vl-column width="8">
-                        <!--<vl-search @click="executeQuery" mod-inline name="search-input" id="search-input"
-                                   placeholder="Search for application profiles or terminology"></vl-search>-->
                         <vl-input-field
                                 @focus="focus = true"
                                 v-model="query"
                                 v-bind:class="{'input-focus': focus}"
                                 id="search-input"
-                                name="search-input" />
-                        <vl-button @click="executeQuery" v-if="focus" id="search-button"><vl-icon icon="search"/></vl-button>
+                                name="search-input"/>
+                        <vl-button @click="executeQuery" v-if="focus" id="search-button">
+                            <vl-icon icon="search"/>
+                        </vl-button>
                     </vl-column>
                 </vl-grid>
             </vl-layout>
         </vl-region>
         <vl-region>
             <vl-layout>
-                <vl-grid mod-stacked>
+                <vl-grid v-bind:class="{'showComponent': queryExecuted, 'hideComponent' : !queryExecuted}" mod-stacked>
                     <vl-column>
                         <vl-tabs>
-                            <vl-tab label="Terminologie"><VocabularyComponent :query="query" ref="Vocabulary"/></vl-tab>
-                            <vl-tab label="Klassen & Eigenschappen"><ApplicationProfileComponent :query="query" ref="ApplicationProfile"/></vl-tab>
+                            <vl-tab :label="'Terminologie (' + vocabularyResult + ')'">
+                                <VocabularyComponent :query="query" v-on:childToParent="onResult" ref="Vocabulary"/>
+                            </vl-tab>
+                            <vl-tab label="Klassen & Eigenschappen">
+                                <ApplicationProfileComponent :query="query" ref="ApplicationProfile"/>
+                            </vl-tab>
                         </vl-tabs>
                     </vl-column>
                 </vl-grid>
@@ -41,19 +45,37 @@
 <script>
     import VocabularyComponent from "./VocabularyComponent";
     import ApplicationProfileComponent from "./ApplicationProfileComponent";
+
     export default {
         name: "SearchComponent",
         components: {ApplicationProfileComponent, VocabularyComponent},
         data() {
             return {
                 query: '',
-                focus: false
+                focus: false,
+                queryExecuted: false,
+                vocabularyResult: 0
             }
         },
         methods: {
-            executeQuery(){
-                this.$refs.Vocabulary.executeQuery();
-                this.$refs.ApplicationProfile.executeQuery();
+            executeQuery() {
+                if (this.query != '') {
+                    this.queryExecuted = true;
+                    this.$refs.Vocabulary.executeQuery();
+                    //this.$refs.ApplicationProfile.executeQuery();
+                }
+
+            },
+            onResult(resultObject) {
+                const key = Object.keys(resultObject)[0];
+                switch (key) {
+                    case 'Vocabulary':
+                        this.vocabularyResult = resultObject[key];
+                        break;
+                    case 'Application_Profile':
+                        console.log('Received AP');
+                        break;
+                }
             }
         }
     }
@@ -87,14 +109,71 @@
         right: 1px;
         border: 2px solid #0055cc;
         font-size: 120%;
+
+        -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+        -moz-animation: fadein 2s; /* Firefox < 16 */
+        -ms-animation: fadein 2s; /* Internet Explorer */
+        -o-animation: fadein 2s; /* Opera < 12.1 */
+        animation: fadein 2s;
+    }
+
+    .showComponent {
+        display: flex!important;
+        -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+        -moz-animation: fadein 1s; /* Firefox < 16 */
+        -ms-animation: fadein 1s; /* Internet Explorer */
+        -o-animation: fadein 1s; /* Opera < 12.1 */
+        animation: fadein 1s;
+    }
+
+    .hideComponent {
+        display: none!important;
     }
 
     .input-focus {
-        border: 2px solid #ffe615!important;
-        width: 85%!important;
+        border: 2px solid #ffe615 !important;
+        width: 86% !important;
         transition-duration: 1s;
     }
 
+    @keyframes fadein {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Firefox < 16 */
+    @-moz-keyframes fadein {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Safari, Chrome and Opera > 12.1 */
+    @-webkit-keyframes fadein {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Internet Explorer */
+    @-ms-keyframes fadein {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
 
 
 </style>
