@@ -55,6 +55,7 @@
         },
         methods: {
             async executeQuery() {
+                this.related.clear();
                 const client = new elasticsearch.Client({
                     host: config.ELASTIC_HOST
                 });

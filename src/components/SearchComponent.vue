@@ -11,6 +11,7 @@
                     <vl-column width="8">
                         <vl-input-field
                                 @focus="focus = true"
+                                @keydown.enter="executeQuery"
                                 v-model="query"
                                 v-bind:class="{'input-focus': focus}"
                                 id="search-input"
