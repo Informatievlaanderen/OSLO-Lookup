@@ -54,6 +54,9 @@ Vue.component('vl-link', VlLink);
 Vue.use(VlCore);
 Vue.use(VlUtil);
 
+import vSelect from "vue-select";
+Vue.component("v-select", vSelect);
+
 new Vue({
   render: h => h(App),
 }).$mount('#app')

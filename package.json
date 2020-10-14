@@ -38,7 +38,8 @@
     "elasticsearch": "^16.7.1",
     "node-sass": "^4.14.1",
     "sass-loader": "^8.0.2",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-select": "^3.10.8"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.4.1",

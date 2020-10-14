@@ -1,9 +1,9 @@
 <template>
     <span>
     <vl-grid v-if="results.length > 0">
-        <vl-column width="8">
+        <vl-column>
             <vl-grid mod-stacked>
-                <vl-column v-bind:key="result._source.URI" width="5" v-for="result of results">
+                <vl-column v-bind:key="result._source.URI" width="6" v-for="result of results">
                     <vl-info-tile
                             :href="result._source.URI"
                             :title="result._source.prefLabel"
@@ -11,20 +11,6 @@
                             target="_blank">
                         {{result._source.definition}}
                     </vl-info-tile>
-                </vl-column>
-            </vl-grid>
-
-        </vl-column>
-        <vl-column width="4" class="voc-information">
-            <vl-title tag-name="h3">Gerelateerde vocabularia</vl-title>
-            <vl-grid mod-stacked>
-                <vl-column v-bind:key="voc" v-for="voc of related">
-                    <vl-info-tile
-                            :href="voc"
-                            :title="voc"
-                            subtitle=""
-                            target="_blank"
-                    />
                 </vl-column>
             </vl-grid>
         </vl-column>
@@ -45,7 +31,7 @@
     export default {
         name: "VocabularyComponent",
         props: {
-            query: String
+            searchTerms: Array
         },
         data() {
             return {
@@ -56,28 +42,33 @@
         methods: {
             async executeQuery() {
                 this.related.clear();
+                this.results = [];
                 const client = new elasticsearch.Client({
                     host: config.ELASTIC_HOST
                 });
 
-                const response = await client.search({
-                    index: 'terminology',
-                    type: 'vocabularies',
-                    body: {
-                        query: {
-                            multi_match: {
-                                query: this.query,
-                                fields: ["prefLabel"],
-                                fuzziness: "AUTO"
+                for (let term of this.searchTerms) {
+
+                    //TODO: better query
+                    const response = await client.search({
+                        index: 'terminology',
+                        type: 'vocabularies',
+                        body: {
+                            query: {
+                                query_string: {
+                                    query: '*' + term + '*',
+                                    fields: ['prefLabel']
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                    this.results = this.results.concat(response.hits.hits);
+                }
 
-                this.results = response.hits.hits;
+                /*this.results = responses.hits.hits;
                 for (let result of this.results) {
                     this.related.add(result._source.context);
-                }
+                }*/
 
                 this.emitResultToParent()
 
