@@ -4,6 +4,7 @@ import App from './App.vue'
 Vue.config.productionTip = false;
 
 import {
+  i18n,
   VlCore,
   VlUtil,
   VlGrid,
@@ -26,8 +27,14 @@ import {
   VlInfoTile,
   VlLinkList,
   VlLinkListItem,
-  VlLink
+  VlLink,
+  VlPillInput,
+  VlLoader
 } from'@govflanders/vl-ui-vue-components';
+
+import VueI18n from 'vue-i18n';
+
+
 
 Vue.component('vl-grid', VlGrid);
 Vue.component('vl-column', VlColumn);
@@ -50,9 +57,19 @@ Vue.component('vl-info-tile', VlInfoTile);
 Vue.component('vl-link-list', VlLinkList);
 Vue.component('vl-link-list-item', VlLinkListItem);
 Vue.component('vl-link', VlLink);
+Vue.component('vl-pill-input', VlPillInput);
+Vue.component('vl-loader', VlLoader);
 
 Vue.use(VlCore);
 Vue.use(VlUtil);
+Vue.use(VueI18n);
+
+const messages = i18n;
+const vlI18n = new VueI18n({
+  locale: 'nl-BE',
+  messages,
+});
+Vue.use(vlI18n);
 
 import vSelect from "vue-select";
 Vue.component("v-select", vSelect);

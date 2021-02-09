@@ -32,7 +32,6 @@
 </template>
 
 <script>
-    const elasticsearch = require('elasticsearch');
 
     export default {
         name: "ApplicationProfileComponent",
@@ -48,7 +47,7 @@
         methods: {
             async executeQuery() {
                 this.results = [];
-                const client = new elasticsearch.Client({
+                /*const client = new elasticsearch.Client({
                     host: 'localhost:9200'
                 });
 
@@ -66,7 +65,7 @@
                         }
                     });
                     this.results = this.results.concat(response.hits.hits);
-                }
+                }*/
 
                 /*this.results = response.hits.hits;
                 for (let result of this.results) {

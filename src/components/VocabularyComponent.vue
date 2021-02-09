@@ -3,11 +3,11 @@
     <vl-grid v-if="results.length > 0">
         <vl-column>
             <vl-grid mod-stacked>
-                <vl-column v-bind:key="result._source.URI" width="6" v-for="result of results">
+                <vl-column v-bind:key="result._source.id" width="6" v-for="result of results">
                     <vl-info-tile
-                            :href="result._source.URI"
+                            :href="result._source.id"
                             :title="result._source.prefLabel"
-                            :subtitle="'Context: ' + result._source.context"
+                            :subtitle="'Domein: ' + result._source.context"
                             target="_blank">
                         {{result._source.definition}}
                     </vl-info-tile>
@@ -25,8 +25,8 @@
 </template>
 
 <script>
-    const elasticsearch = require('elasticsearch');
     const config = require('../../config');
+    const VOCABULARY_ENDPOINT = `${config.ELASTIC_ENDPOINT}/oslo-terminology/_search`
 
     export default {
         name: "VocabularyComponent",
@@ -43,38 +43,43 @@
             async executeQuery() {
                 this.related.clear();
                 this.results = [];
-                const client = new elasticsearch.Client({
-                    host: config.ELASTIC_HOST
-                });
+
+                const headers = new Headers();
+                headers.append("Content-Type", "application/json");
 
                 for (let term of this.searchTerms) {
-
-                    //TODO: better query
-                    const response = await client.search({
-                        index: 'terminology',
-                        type: 'vocabularies',
-                        body: {
-                            query: {
-                                query_string: {
-                                    query: '*' + term + '*',
-                                    fields: ['prefLabel']
-                                }
+                    const request = {
+                        size: 10000,
+                        query: {
+                            query_string: {
+                                query: `*${term}*`,
+                                fields: ['prefLabel']
                             }
                         }
-                    });
-                    this.results = this.results.concat(response.hits.hits);
-                }
+                    }
 
-                /*this.results = responses.hits.hits;
-                for (let result of this.results) {
-                    this.related.add(result._source.context);
-                }*/
+                    const requestOptions = {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify(request),
+                        redirect: 'follow'
+                    };
+
+                    await fetch(VOCABULARY_ENDPOINT, requestOptions)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.results = this.results.concat(data.hits.hits)
+                        })
+                        .catch(error => console.error(error));
+
+                }
 
                 this.emitResultToParent()
 
             },
             emitResultToParent() {
                 this.$emit('childToParent', {'Vocabulary': this.results.length});
+                this.$emit('queryFinished');
             }
         }
     }

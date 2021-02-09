@@ -9,25 +9,14 @@
                         </vl-title>
                     </vl-column>
                     <vl-column width="8">
-                        <v-select :options="paginated"
-                                  @search="query => search = query"
-                                  :filterable="false"
-                                  required
-                                  multiple
-                                  taggable
-                                  placeholder="Geef één of meer zoektermen op"
-                                  v-model="selected">
-                            <!--<li slot="list-footer" class="pagination">
-                                <button @click="offset -= 10" :disabled="!hasPrevPage">Prev</button>
-                                <button @click="offset += 10" :disabled="!hasNextPage">Next</button>
-                            </li>-->
-                        </v-select>
+                        <vl-pill-input placeholder="Geef een of meer zoekwoorden op" v-model="terms" class="search-input" name="search-input"></vl-pill-input>
                     </vl-column>
-                    <vl-column width="6" class="vl-push--4-12">
+                    <vl-column class="vl-u-align-center">
                         <vl-button @click="executeQuery"
                                    @mouseover="hovered = true"
                                    @mouseleave="hovered = false"
-                                   :class="{'hover': hovered}" id="search-button">
+                                   :class="{'hover': hovered}"
+                                   id="search-button">
                             Zoeken
                         </vl-button>
                     </vl-column>
@@ -36,15 +25,20 @@
         </vl-region>
         <vl-region>
             <vl-layout>
+                <vl-grid v-bind:class="{'showComponent': queryStarted &&  !queryExecuted, 'hideComponent' : !queryStarted || queryExecuted}" mod-stacked>
+                    <vl-column class="vl-u-align-center">
+                        <vl-loader message="De termen worden opgezocht" />
+                    </vl-column>
+                </vl-grid>
                 <vl-grid v-bind:class="{'showComponent': queryExecuted, 'hideComponent' : !queryExecuted}" mod-stacked>
                     <vl-column>
                         <vl-tabs>
                             <vl-tab :label="'Terminologie (' + numberOfVocabularies + ')'">
-                                <VocabularyComponent :searchTerms="selected" v-on:childToParent="onResult" ref="Vocabulary"/>
+                                <VocabularyComponent :searchTerms="terms" v-on:queryFinished="onQueryFinished" v-on:childToParent="onResult" ref="Vocabulary"/>
                             </vl-tab>
-                            <vl-tab :label="'Klassen & Eigenschappen (' + numberOfApplicationProfiles + ')'">
-                                <ApplicationProfileComponent :searchTerms="selected" v-on:childToParent="onResult" ref="ApplicationProfile"/>
-                            </vl-tab>
+                            <!--<vl-tab :label="'Klassen & Eigenschappen (' + numberOfApplicationProfiles + ')'">
+                                <ApplicationProfileComponent :searchTerms="terms" v-on:childToParent="onResult" ref="ApplicationProfile"/>
+                            </vl-tab>-->
                         </vl-tabs>
                     </vl-column>
                 </vl-grid>
@@ -58,31 +52,25 @@
     import VocabularyComponent from "./VocabularyComponent";
     import ApplicationProfileComponent from "./ApplicationProfileComponent";
 
-    const elasticsearch = require('elasticsearch');
-    const config = require('../../config');
-
     export default {
         name: "SearchComponent",
         components: {ApplicationProfileComponent, VocabularyComponent},
         data: () => ({
             focus: false,
             queryExecuted: false,
+            queryStarted: false,
             numberOfVocabularies: 0,
             numberOfApplicationProfiles: 0,
-            data: [],
-            selected: [],
+            terms: [],
             hovered: false,
-            search: '',
-            offset: 0,
-            limit: 20,
 
         }),
         methods: {
             executeQuery() {
-                if (this.selected.length) {
-                    this.queryExecuted = true;
+                if (this.terms.length) {
+                    this.queryStarted = true;
                     this.$refs.Vocabulary.executeQuery();
-                    this.$refs.ApplicationProfile.executeQuery();
+                    //this.$refs.ApplicationProfile.executeQuery(); //TODO: enable this once production elasticsearch also contains application profiles
                 }
 
             },
@@ -96,61 +84,9 @@
                         this.numberOfApplicationProfiles = resultObject[key];
                         break;
                 }
-            }
-        },
-        async beforeCreate() {
-            this.data = [];
-            const client = new elasticsearch.Client({
-                host: config.ELASTIC_HOST
-            });
-
-            const vocabularies = await client.search({
-                index: 'terminology',
-                type: 'vocabularies',
-                body: {
-                    _source: ['prefLabel'],
-                    size: 10000,
-                    query: {
-                        match_all: {}
-                    }
-                }
-            });
-
-            //TODO: not showing 'Persoon'
-            const applicationProfiles = await client.search({
-                index: 'application_profiles',
-                type: 'classes',
-                body: {
-                    _source: ['prefLabel', 'properties.prefLabel'],
-                    size: 10000,
-                    query: {
-                        match_all: {}
-                    }
-                }
-            });
-            const vocLabels = vocabularies.hits.hits.map(object => object._source.prefLabel);
-            const apLabels = applicationProfiles.hits.hits.map(object => object._source.prefLabel);
-            let propertyArray = applicationProfiles.hits.hits.map(object => object._source.properties).flat();
-            propertyArray = propertyArray.filter(term => term !== undefined); // Apparently, there's an undefined in the array which causes errors. TODO: check this for production
-            const propertyLabels = propertyArray.map(object => object.prefLabel);
-            this.data = [...new Set([...vocLabels, ...apLabels, ...propertyLabels])];   // Add vocabularies
-
-
-            // Apparently, there's an undefined in the array which causes errors. TODO: check this for production
-            this.data = this.data.filter(term => term !== undefined);
-
-        },
-        computed: {
-            filtered() {
-                if (this.data.length) {
-                    return this.data.filter(term => term.toLowerCase().includes(this.search.toLowerCase()));
-                } else {
-                    return [];
-                }
             },
-            paginated() {
-                return this.filtered.slice(this.offset, this.limit + this.offset);
-
+            onQueryFinished(){
+                this.queryExecuted = true;
             }
         }
     }
@@ -164,41 +100,31 @@
     @import "~@govflanders/vl-ui-search/src/scss/search";
     @import "~@govflanders/vl-ui-tabs/src/scss/tabs";
     @import "~vue-select/src/scss/vue-select.scss";
+    @import "~@govflanders/vl-ui-pill-input/src/scss/pill-input";
+    @import "~@govflanders/vl-ui-pill/src/scss/pill";
+    @import "~@govflanders/vl-ui-util/src/scss/util";
+    @import "~@govflanders/vl-ui-loader/src/scss/loader";
 
     .title {
         text-align: center !important;
         font-size: 350%;
     }
 
-    .v-select .vs__dropdown-toggle,
-    .v-select .vs__dropdown-menu {
-        font-size: 120%;
-        font-family: "Flanders Art Serif";
+    .vl-form__annotation {
+        margin-top: 2%;
     }
 
-    .v-select .vs__search::placeholder {
-        color: lightgray;
-        font-family: "Flanders Art Serif";
-    }
-
-    .v-select .vs__deselect:hover {
-        fill: red;
-    }
-
-    #search-input {
-        height: 30px;
-        border-radius: 25px;
-        border: 2px solid #0055cc;
-        font-size: 120%;
+    /*.vl-pill-input__inner {
+        height: 50px!important;
         width: 100%;
-    }
+    }*/
 
     #search-button {
         height: 40px;
         border: 2px solid #0055cc;
         font-size: 120%;
         border-radius: 5px;
-        outline: none;
+        outline: none!important;
     }
 
     .hover {
@@ -217,15 +143,8 @@
         -o-animation: fadein 1s; /* Opera < 12.1 */
         animation: fadein 1s;
     }
-
     .hideComponent {
         display: none !important;
-    }
-
-    .input-focus {
-        border: 2px solid #ffe615 !important;
-        width: 86% !important;
-        transition-duration: 1s;
     }
 
 
