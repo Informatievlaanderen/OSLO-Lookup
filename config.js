@@ -1,3 +1,3 @@
 module.exports = {
-    ELASTIC_HOST: 'localhost:9200'
+    ELASTIC_ENDPOINT: 'https://oslo.basisregisters.dev-vlaanderen.be/search'
 }
