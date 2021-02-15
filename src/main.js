@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import App from './App.vue'
+import App from './App.vue';
+import router from "./router/route";
 
 Vue.config.productionTip = false;
 
@@ -75,5 +76,6 @@ import vSelect from "vue-select";
 Vue.component("v-select", vSelect);
 
 new Vue({
+  router,
   render: h => h(App),
 }).$mount('#app')
