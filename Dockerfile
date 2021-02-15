@@ -1,8 +1,5 @@
 FROM node:lts-alpine
 
-# install simple http server for serving static content
-RUN npm install -g http-server
-
 # make the 'app' folder the current working directory
 WORKDIR /app
 
@@ -22,5 +19,9 @@ COPY . .
 # build app for production with minification
 RUN npm run build
 
-EXPOSE 8080
-CMD [ "http-server", "dist" ]
+FROM djoewie/oslo-simple-server:v0.3.0
+
+COPY --from=0 /app/dist /usr/src/app/dist
+
+#for testing purpose
+#COPY --from=0 /app/dist /usr/src/app/dist/tools/playground
