@@ -1,0 +1,15 @@
+{
+    "extends" : [
+        "github>informatievlaanderen/renovate-presets:presets"
+    ],
+    "requiredStatusChecks" : null,
+    "hostRules" : [
+        {
+            "matchHost": "registry.npmjs.org",
+            "encrypted": {
+                "token": "FXyPxk8Jx7j2dlBZtVFkCU03jGNyMXX5iYOJZ9VHVVuI/QSnWwuCA084uTW3rOxeHvVqc+55MvNkWdQIZR9YRG8djYVubbCwdUXZekN/9ekNeFT1vHSZSIVILX0zAzFgdEKlEBsWgocbXjoRZEqNS1n/78FjgAq60/OIQNaYzOCAfWREzw0Zm7CMXg3lZ0zOQJDCpUipWtSpzacXO9tbFyKjaJiLtXscp+vYlwGHKeEM02caKDAftw+SXv9Clkt1UMLpRH7tDbUr45JQEeblgDKRAKKmTVnX4dzCZvkZSftDkEvzknNjISV6EW8b64Qqg582W+2BHLk1ExnKJc8Tug=="
+            }
+        }
+    ],
+    "ignoreDeps" : ["sass-loader"]
+}
