@@ -1,96 +1,118 @@
 <template>
-    <div>
-        <vl-region>
-            <vl-layout>
-                <vl-grid class="vl-grid--align-center" mod-stacked>
-                    <vl-column>
-                        <vl-title class="title" tag-name="h1">
-                            OSLO Search Engine
-                        </vl-title>
-                    </vl-column>
-                    <vl-column width="8">
-                        <vl-pill-input placeholder="Geef een of meer zoekwoorden op" v-model="terms" class="search-input" name="search-input"></vl-pill-input>
-                    </vl-column>
-                    <vl-column class="vl-u-align-center">
-                        <vl-button @click="executeQuery"
-                                   @mouseover="hovered = true"
-                                   @mouseleave="hovered = false"
-                                   :class="{'hover': hovered}"
-                                   id="search-button">
-                            Zoeken
-                        </vl-button>
-                    </vl-column>
-                </vl-grid>
-            </vl-layout>
-        </vl-region>
-        <vl-region>
-            <vl-layout>
-                <vl-grid v-bind:class="{'showComponent': queryStarted &&  !queryExecuted, 'hideComponent' : !queryStarted || queryExecuted}" mod-stacked>
-                    <vl-column class="vl-u-align-center">
-                        <vl-loader message="De termen worden opgezocht" />
-                    </vl-column>
-                </vl-grid>
-                <vl-grid v-bind:class="{'showComponent': queryExecuted, 'hideComponent' : !queryExecuted}" mod-stacked>
-                    <vl-column>
-                        <vl-tabs>
-                            <vl-tab :label="'Terminologie (' + numberOfVocabularies + ')'">
-                                <VocabularyComponent :searchTerms="terms" v-on:queryFinished="onQueryFinished" v-on:childToParent="onResult" ref="Vocabulary"/>
-                            </vl-tab>
-                            <!--<vl-tab :label="'Klassen & Eigenschappen (' + numberOfApplicationProfiles + ')'">
+  <div>
+    <vl-region>
+      <vl-layout>
+        <vl-grid
+          class="vl-grid--align-center"
+          mod-stacked
+        >
+          <vl-column>
+            <vl-title
+              class="title"
+              tag-name="h1"
+            >
+              OSLO Search Engine
+            </vl-title>
+          </vl-column>
+          <vl-column width="8">
+            <vl-pill-input
+              v-model="terms"
+              placeholder="Geef een of meer zoekwoorden op"
+              class="search-input"
+              name="search-input"
+            />
+          </vl-column>
+          <vl-column class="vl-u-align-center">
+            <vl-button
+              id="search-button"
+              :class="{'hover': hovered}"
+              @click="executeQuery"
+              @mouseover="hovered = true"
+              @mouseleave="hovered = false"
+            >
+              Zoeken
+            </vl-button>
+          </vl-column>
+        </vl-grid>
+      </vl-layout>
+    </vl-region>
+    <vl-region>
+      <vl-layout>
+        <vl-grid
+          :class="{'showComponent': queryStarted && !queryExecuted, 'hideComponent' : !queryStarted || queryExecuted}"
+          mod-stacked
+        >
+          <vl-column class="vl-u-align-center">
+            <vl-loader message="De termen worden opgezocht" />
+          </vl-column>
+        </vl-grid>
+        <vl-grid
+          :class="{'showComponent': queryExecuted, 'hideComponent' : !queryExecuted}"
+          mod-stacked
+        >
+          <vl-column>
+            <vl-tabs>
+              <vl-tab :label="'Terminologie (' + numberOfVocabularies + ')'">
+                <VocabularyComponent
+                  ref="Vocabulary"
+                  :search-terms="terms"
+                  @queryFinished="onQueryFinished"
+                  @childToParent="onResult"
+                />
+              </vl-tab>
+              <!--<vl-tab :label="'Klassen & Eigenschappen (' + numberOfApplicationProfiles + ')'">
                                 <ApplicationProfileComponent :searchTerms="terms" v-on:childToParent="onResult" ref="ApplicationProfile"/>
                             </vl-tab>-->
-                        </vl-tabs>
-                    </vl-column>
-                </vl-grid>
-            </vl-layout>
-        </vl-region>
-    </div>
-
+            </vl-tabs>
+          </vl-column>
+        </vl-grid>
+      </vl-layout>
+    </vl-region>
+  </div>
 </template>
 
 <script>
-    import VocabularyComponent from "./VocabularyComponent";
-    import ApplicationProfileComponent from "./ApplicationProfileComponent";
+import VocabularyComponent from "./VocabularyComponent";
+import ApplicationProfileComponent from "./ApplicationProfileComponent";
 
-    export default {
-        name: "SearchComponent",
-        components: {ApplicationProfileComponent, VocabularyComponent},
-        data: () => ({
-            focus: false,
-            queryExecuted: false,
-            queryStarted: false,
-            numberOfVocabularies: 0,
-            numberOfApplicationProfiles: 0,
-            terms: [],
-            hovered: false,
-
-        }),
-        methods: {
-            executeQuery() {
-                if (this.terms.length) {
-                    this.queryStarted = true;
-                    this.$refs.Vocabulary.executeQuery();
-                    //this.$refs.ApplicationProfile.executeQuery(); //TODO: enable this once production elasticsearch also contains application profiles
-                }
-
-            },
-            onResult(resultObject) {
-                const key = Object.keys(resultObject)[0];
-                switch (key) {
-                    case 'Vocabulary':
-                        this.numberOfVocabularies = resultObject[key];
-                        break;
-                    case 'ApplicationProfile':
-                        this.numberOfApplicationProfiles = resultObject[key];
-                        break;
-                }
-            },
-            onQueryFinished(){
-                this.queryExecuted = true;
-            }
-        }
+export default {
+  name: "SearchComponent",
+  components: { VocabularyComponent },
+  data: () => ({
+    focus: false,
+    queryExecuted: false,
+    queryStarted: false,
+    numberOfVocabularies: 0,
+    numberOfApplicationProfiles: 0,
+    terms: [],
+    hovered: false
+  }),
+  methods: {
+    executeQuery() {
+      if (this.terms.length) {
+        this.queryStarted = true;
+        this.$refs.Vocabulary.executeQuery();
+        //this.$refs.ApplicationProfile.executeQuery(); //TODO: enable this once production elasticsearch also contains application profiles
+      }
+    },
+    onResult(resultObject) {
+      const key = Object.keys(resultObject)[0];
+      switch (key) {
+        case "Vocabulary":
+          this.numberOfVocabularies = resultObject[key];
+          break;
+        case "ApplicationProfile":
+          this.numberOfApplicationProfiles = resultObject[key];
+          break;
+      }
+    },
+    onQueryFinished() {
+      this.queryExecuted = true;
     }
+  }
+};
 </script>
+
 
 <style lang="scss">
     @import "~@govflanders/vl-ui-core/src/scss/core";
