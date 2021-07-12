@@ -23,7 +23,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "7.10.0",
+    "@elastic/elasticsearch": "7.13.0",
     "@govflanders/vl-ui-button": "3.12.29",
     "@govflanders/vl-ui-content-header": "3.12.29",
     "@govflanders/vl-ui-core": "4.1.29",
