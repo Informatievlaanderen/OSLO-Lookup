@@ -40,7 +40,7 @@
     "@govflanders/vl-ui-titles": "3.12.32",
     "@govflanders/vl-ui-util": "3.12.32",
     "@govflanders/vl-ui-vue-components": "3.11.0",
-    "@types/node": "14.17.6",
+    "@types/node": "14.17.7",
     "choices.js": "9.0.1",
     "core-js": "3.15.2",
     "node-fetch": "2.6.1",
