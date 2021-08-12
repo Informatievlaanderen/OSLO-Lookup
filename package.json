@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "7.14.0",
-    "@govflanders/vl-ui-button": "3.12.33",
+    "@govflanders/vl-ui-button": "4.0.0",
     "@govflanders/vl-ui-content-header": "3.12.33",
     "@govflanders/vl-ui-core": "4.1.33",
     "@govflanders/vl-ui-equal-height": "3.12.33",
