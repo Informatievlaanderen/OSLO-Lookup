@@ -34,7 +34,7 @@
     "@govflanders/vl-ui-link-list": "3.12.33",
     "@govflanders/vl-ui-loader": "3.12.33",
     "@govflanders/vl-ui-pill-input": "3.12.33",
-    "@govflanders/vl-ui-search": "3.12.33",
+    "@govflanders/vl-ui-search": "4.0.0",
     "@govflanders/vl-ui-search-results": "3.12.33",
     "@govflanders/vl-ui-tabs": "3.12.33",
     "@govflanders/vl-ui-titles": "3.12.33",
