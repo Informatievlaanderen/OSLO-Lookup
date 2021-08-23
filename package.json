@@ -37,7 +37,7 @@
     "@govflanders/vl-ui-search": "3.12.33",
     "@govflanders/vl-ui-search-results": "3.12.33",
     "@govflanders/vl-ui-tabs": "3.12.33",
-    "@govflanders/vl-ui-titles": "3.12.33",
+    "@govflanders/vl-ui-titles": "5.0.1",
     "@govflanders/vl-ui-util": "3.12.33",
     "@govflanders/vl-ui-vue-components": "3.11.0",
     "@types/node": "14.17.11",
