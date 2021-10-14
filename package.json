@@ -51,8 +51,8 @@
     "vue-select": "3.13.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "4.5.13",
-    "@vue/cli-service": "4.5.13",
+    "@vue/cli-plugin-babel": "4.5.14",
+    "@vue/cli-service": "4.5.14",
     "eslint": "8.0.0",
     "eslint-plugin-vue": "7.19.1",
     "husky": "7.0.2",
