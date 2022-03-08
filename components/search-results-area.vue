@@ -5,7 +5,11 @@
         Resultaten ({{ results.length }})
       </vl-title>
     </vl-column>
-    <vl-column v-for="(result, index) of results" :key="index" width="6">
+    <vl-column v-if="results.length >= shownResults">
+      {{ results.length }}
+      <pager :from="from" :to="shownResults" :total="results.length" />
+    </vl-column>
+    <vl-column v-for="(result, index) of loadedResults" :key="index" width="6">
       <search-result :item="result" />
     </vl-column>
   </vl-grid>
@@ -24,8 +28,44 @@ export default Vue.extend({
   },
   data() {
     return {
-      osloItems: [] as OsloItem[]
+      from: 0,
+      shownResults: 20,
+      offset: 10
     }
+  },
+  computed: {
+    // FIXME: this should be OsloItem[]
+    loadedResults(): any[] {
+      console.log(`Running this property`)
+      return this.results.slice(this.from, this.shownResults)
+    }
+  },
+  created() {
+    this.$nuxt.$on('next-results', () => {
+      if (this.shownResults === this.results.length) {
+        return
+      }
+      this.from = this.shownResults
+
+      if (this.shownResults + this.offset > this.results.length) {
+        this.shownResults = this.results.length
+      } else {
+        this.shownResults += this.offset
+      }
+    })
+
+    this.$nuxt.$on('previous-results', () => {
+      if (this.from === 0) {
+        return
+      }
+      this.shownResults = this.from
+
+      if (this.from - this.offset < 0) {
+        this.from = 0
+      } else {
+        this.from -= this.offset
+      }
+    })
   }
 })
 </script>
