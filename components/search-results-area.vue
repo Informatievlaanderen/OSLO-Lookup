@@ -6,7 +6,6 @@
       </vl-title>
     </vl-column>
     <vl-column v-if="results.length >= shownResults">
-      {{ results.length }}
       <pager :from="from" :to="shownResults" :total="results.length" />
     </vl-column>
     <vl-column v-for="(result, index) of loadedResults" :key="index" width="6">
@@ -34,10 +33,9 @@ export default Vue.extend({
     }
   },
   computed: {
-    // FIXME: this should be OsloItem[]
-    loadedResults(): any[] {
-      console.log(`Running this property`)
-      return this.results.slice(this.from, this.shownResults)
+    loadedResults(): OsloItem[] {
+      const copy = [...this.results] as OsloItem[]
+      return copy.slice(this.from, this.shownResults)
     }
   },
   created() {
