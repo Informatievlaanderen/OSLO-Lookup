@@ -10,6 +10,7 @@
         mod-block
         placeholder="Geef een of meer zoekwoorden in"
         @blur="showSearchButton = input.length > 0 ? true : false"
+        @keyup.enter="input.length > 0 && search()"
       />
     </vl-column>
     <vl-column width="2">
@@ -37,7 +38,16 @@ export default Vue.extend({
   },
   methods: {
     async search() {
-      const keywords = this.input.split(' ')
+      let keywords = []
+
+      if (
+        this.input.charAt(0) === '"' &&
+        this.input.charAt(this.input.length - 1) === '"'
+      ) {
+        keywords = [this.input.substring(1, this.input.length - 1)]
+      } else {
+        keywords = this.input.split(' ')
+      }
 
       const queries: Promise<any>[] = []
       keywords.forEach((keyword) => {

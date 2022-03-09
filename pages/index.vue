@@ -44,7 +44,14 @@ export default Vue.extend({
   created() {
     this.$nuxt.$on('search-results', (responses: any[]) => {
       this.showResultsArea = true
-      this.osloResults = this.mapResults(responses)
+      let results = this.mapResults(responses)
+
+      // In case of multiple keywords, possible duplicates must be removed
+      if (responses.length > 1) {
+        results = this.removeDuplicates(results)
+      }
+
+      this.osloResults = results
     })
   },
   methods: {
@@ -58,10 +65,21 @@ export default Vue.extend({
     },
     mapToOsloItem(object: any): OsloItem {
       return new OsloItem(
+        object._id,
         object._source[config.idField],
         object._source[config.nameField],
         object._source[config.contextField],
         object._source[config.definitionField]
+      )
+    },
+    removeDuplicates(results: OsloItem[]): OsloItem[] {
+      const uniqueObjectIds = Array.from(
+        new Set(results.map((object) => object.objectIdentifier))
+      )
+
+      return uniqueObjectIds.map(
+        (objectId) =>
+          results.find((object) => object.objectIdentifier === objectId)!
       )
     }
   }

@@ -5,11 +5,28 @@
         Resultaten ({{ results.length }})
       </vl-title>
     </vl-column>
-    <vl-column v-if="results.length >= shownResults">
-      <pager :from="from" :to="shownResults" :total="results.length" />
+    <vl-column
+      v-if="results.length <= 0"
+      class="animate__animated animate__fadeInLeft"
+    >
+      <error-alert />
     </vl-column>
-    <vl-column v-for="(result, index) of loadedResults" :key="index" width="6">
-      <search-result :item="result" />
+    <vl-column v-else>
+      <vl-grid mod-stacked>
+        <vl-column v-if="results.length >= shownResults">
+          <pager :from="from" :to="shownResults" :total="results.length" />
+        </vl-column>
+        <vl-column
+          v-for="(result, index) of loadedResults"
+          :key="index"
+          width="6"
+        >
+          <search-result
+            class="animate__animated animate__fadeInLeft"
+            :item="result"
+          />
+        </vl-column>
+      </vl-grid>
     </vl-column>
   </vl-grid>
 </template>
@@ -17,8 +34,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import { OsloItem } from 'helpers/OsloItem'
+import errorAlert from './error-alert.vue'
 
 export default Vue.extend({
+  components: { errorAlert },
   props: {
     results: {
       type: Array,
