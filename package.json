@@ -26,7 +26,7 @@
     "@elastic/elasticsearch": "7.17.0",
     "@govflanders/vl-ui-button": "3.12.33",
     "@govflanders/vl-ui-content-header": "3.12.33",
-    "@govflanders/vl-ui-core": "4.1.33",
+    "@govflanders/vl-ui-core": "13.0.0",
     "@govflanders/vl-ui-equal-height": "3.12.33",
     "@govflanders/vl-ui-icon": "3.12.33",
     "@govflanders/vl-ui-info-tile": "3.12.33",
