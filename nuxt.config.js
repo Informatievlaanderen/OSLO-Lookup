@@ -67,5 +67,13 @@ export default {
   build: {
     maxChunkSize: 1000000,
     vendor: ['@govflanders/vl-ui-vue-components'],
+  },
+
+  router: {
+    base: '/tool/search-engine'
+  },
+
+  generate: {
+    fallback: true
   }
 }
