@@ -20,9 +20,9 @@
         />
       </div>
       <vl-content-header-title
-        title="Search Engine"
+        title="Lookup"
         tag-name="h1"
-        href="https://github.com/Informatievlaanderen/OSLO-Search-Engine"
+        href="https://github.com/Informatievlaanderen/OSLO-Lookup"
         :context="{
           href: 'https://overheid.vlaanderen.be/producten-diensten/oslo',
           title: 'OSLO',
