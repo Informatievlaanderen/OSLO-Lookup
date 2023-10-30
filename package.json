@@ -54,7 +54,7 @@
     "@vue/cli-plugin-babel": "4.5.19",
     "@vue/cli-service": "4.5.19",
     "eslint": "8.52.0",
-    "eslint-plugin-vue": "9.18.0",
+    "eslint-plugin-vue": "9.18.1",
     "husky": "8.0.3",
     "sass": "1.66.1",
     "sass-loader": "^10.2.0",
