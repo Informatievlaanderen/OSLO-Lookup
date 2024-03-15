@@ -46,7 +46,7 @@
     "node-fetch": "2.7.0",
     "request": "2.88.2",
     "vue": "2.7.16",
-    "vue-i18n": "8.28.2",
+    "vue-i18n": "9.10.2",
     "vue-router": "3.6.5",
     "vue-select": "3.20.2"
   },
